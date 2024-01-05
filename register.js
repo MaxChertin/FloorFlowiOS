@@ -2,16 +2,29 @@ import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import React, {useState} from 'react';
 import { MaterialIcons } from '@expo/vector-icons'; 
-import { StyleSheet, Text, View, Image, SafeAreaView, TextInput, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, TextInput, TouchableOpacity, Button, Alert } from 'react-native';
+
+const checkPinCode = (pinGiven) => {
+  switch (pinGiven) {
+    case '9999':
+      return true;
+    case '':
+      Alert.alert('קוד אימות מעליתן','הנך מחוייב להזין קוד אימות למעליתן!');
+      return false;
+    default:
+      Alert.alert('קוד אימות מעליתן','קוד האימות שהזנת אינו תקין!');
+  }
+}
 
 export default function Register({ navigateToMain }) {
   const [isElevatorMan, setIsElevatorMan] = useState(null);
   const [textInput, setTextInput] = useState('');
+  const [pin, setPin] = useState('');
 
   const canProceed = isElevatorMan != null && textInput.trim(' ') != ''
-  
 
   const proceed = () => {
+    if (isElevatorMan === true && !checkPinCode(pin)) return;
     console.log('proceeding!');
     navigateToMain(textInput, isElevatorMan);
   }
@@ -38,6 +51,7 @@ export default function Register({ navigateToMain }) {
             <Text style={styles.buttontext}>לא</Text>
           </TouchableOpacity>
         </View>
+        {isElevatorMan === true ? <View style={styles.shrink}><TextInput style={styles.codeInput} value={pin} onChangeText={setPin} keyboardType='numeric' maxLength={4} placeholder='הזן קוד אימות'></TextInput></View> : null}
         <TouchableOpacity style={[styles.goButton, canProceed ? null : styles.goButtonCanceled]} activeOpacity={canProceed ? 0.2 : 1} onPress={canProceed ? proceed : null}>
           <Text style={styles.buttontext}>
           <MaterialIcons name="navigate-before" size={20} color="white"/> יאללה, הבא</Text>
@@ -55,6 +69,17 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 10
     },
+    codeInput: {
+        borderWidth: 2,
+        borderRadius: 20,
+        textAlign: 'center',
+        fontSize: 22,
+        marginTop: '10%',
+        padding: 10,
+    },
+    shrink: {
+        paddingHorizontal: '18%',
+    },
     text1: {
         fontFamily: 'rubikmedium',
         fontSize: 18,
@@ -69,7 +94,7 @@ const styles = StyleSheet.create({
     text2: {
         fontFamily: 'rubikmedium',
         fontSize: 22,
-        marginTop: '15%',
+        marginTop: '12%',
         textAlign: 'center'
     },
     buttonAlignment: {
@@ -99,7 +124,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#5969f7',
       padding: 10,
       borderWidth: 1,
-      marginTop: '20%',
+      marginTop: '15%',
       margin: 60,
       borderRadius: 20
     },

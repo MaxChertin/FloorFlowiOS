@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "163280793320",
+    "project_id": "floor-flow-server",
+    "storage_bucket": "floor-flow-server.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163280793320:android:65869fdd046eb8278aa35d",
+        "android_client_info": {
+          "package_name": "com.maxchertin.FloorFlow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbdYnSniup56TzrEz0A5R1Px_XkvpgZOg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
