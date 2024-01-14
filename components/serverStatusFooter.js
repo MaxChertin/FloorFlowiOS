@@ -1,6 +1,9 @@
 import { useFonts } from 'expo-font';
-import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, I18nManager  } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
+import { StyleSheet, Text, View, Image, SafeAreaView, I18nManager } from 'react-native';
+
+SplashScreen.preventAutoHideAsync();
 
 const Status = {
     Disconnected: 0,
@@ -27,25 +30,31 @@ const returnSignalBased = (recievedStatus) => {
 const isRTL = I18nManager.isRTL;
 const rowDirection = isRTL ? 'row-reverse' : 'row';
 
-
 export default function ServerStatusFooter({ serverStatus }) {
   const [SERVER_STATUS, set_SERVER_STATUS] = useState(Status.Pending);
   useEffect(() => {
      set_SERVER_STATUS(serverStatus);
   }, [serverStatus]);
 
-  const [loaded] = useFonts({
+  const [fontsLoaded] = useFonts({
       rubikmedium: require('../assets/fonts/Rubik-Medium.ttf'),
   });
-  if (!loaded) return null;
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container} onLayout={onLayoutRootView}>
       <View style={styles.alignStatus}>
         <Text style={styles.text}>SERVER STATUS: </Text>
         {returnSignalBased(SERVER_STATUS)}
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
   

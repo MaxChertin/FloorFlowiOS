@@ -11,7 +11,6 @@ export default function ElectraHeader() {
   const styles = StyleSheet.create({
     container: {
         flex: .25,
-        backgroundColor: 'white',
         alignItems: 'center'
       },
     electraImageFit: {

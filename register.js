@@ -1,8 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
-import React, {useState} from 'react';
-import { MaterialIcons } from '@expo/vector-icons'; 
+import React, {useState, useCallback} from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
+import * as SplashScreen from 'expo-splash-screen';
 import { StyleSheet, Text, View, Image, SafeAreaView, TextInput, TouchableOpacity, Button, Alert } from 'react-native';
+
+SplashScreen.preventAutoHideAsync();
 
 const checkPinCode = (pinGiven) => {
   switch (pinGiven) {
@@ -25,20 +28,31 @@ export default function Register({ navigateToMain }) {
 
   const proceed = () => {
     if (isElevatorMan === true && !checkPinCode(pin)) return;
-    console.log('proceeding!');
+    if (textInput === 'Electra User') {
+      Alert.alert('שגיאה', 'השם "Electra User" הוא שם מיוחד השמור במערכת, ואין באפשרותך לבחור אותו כשמך. אנא הזן את שמך האמיתי, על מנת שחבריך לעבודה יוכלו לזהות אותך.');
+      return;
+    }
+
     navigateToMain(textInput, isElevatorMan);
   }
 
   const chooseElvMan = (proptype) => {
     setIsElevatorMan(proptype);
   };
-  const [loaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     rubikmedium: require('./assets/fonts/Rubik-Medium.ttf'),
   });
-  if (!loaded) return null;
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
 
   return (
-    <SafeAreaView style = {{flex: .69}}>
+    <SafeAreaView style = {{flex: .69}} onLayout={onLayoutRootView}>
         <Text style={styles.text1}>שלום! כדי להתחיל, הזן את הנתונים הבאים:</Text>
         <TextInput style={styles.input} placeholder='הזן את שמך המלא' value={textInput} onChangeText={(text) => setTextInput(text)}></TextInput>
         {textInput.trim(' ') != '' ? null : <Text style={styles.mustText}>שדה זה הינו חובה</Text>}
@@ -87,7 +101,7 @@ const styles = StyleSheet.create({
     },
     mustText: {
         fontFamily: 'rubikmedium',
-        fontSize: 12,
+        fontSize: 14,
         color: 'red',
         padding: 5
     },

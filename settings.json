@@ -1,4 +1,5 @@
 {
-    "name": "Electra User", // default name = "electra user"
-    "malitan": false // default malitan = false
+    "name": "Electra User", // default name = "Electra User"
+    "malitan": false, // default malitan = false
+    "available": "null" // if malitan is true, this prop will be a boolean value.
 }
